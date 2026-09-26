@@ -20,6 +20,7 @@ Responsibilities:
 - learn the engineering and neuroscience concepts,
 - run and inspect experiments,
 - challenge assumptions,
+- approve final architecture decisions,
 - make final project decisions.
 
 Rule:
@@ -61,7 +62,7 @@ Primary responsibilities:
 - control scope,
 - explain neuroscience and AI concepts,
 - help design experiments,
-- review architectural decisions,
+- lead architecture and research-design discussions,
 - connect implementation work to the research question.
 
 ChatGPT should prefer understanding before implementation.
@@ -76,6 +77,7 @@ Important decisions from conversations must be written into GitHub.
 
 Primary responsibilities:
 
+- propose architecture and engineering improvements for approval,
 - implement approved architecture,
 - create production-quality Python modules,
 - refactor code,
@@ -85,7 +87,7 @@ Primary responsibilities:
 
 Claude Code should work from existing repository documentation.
 
-Claude Code must not silently redefine:
+Claude Code must not independently redefine:
 
 - project scope,
 - scientific claims,
@@ -93,6 +95,8 @@ Claude Code must not silently redefine:
 - dataset assumptions,
 - experiment objectives.
 
+Proposed architecture or engineering changes must go through ChatGPT-led
+architecture discussion and be approved by Sagar before implementation.
 Major changes should be proposed before implementation.
 
 ---
@@ -104,7 +108,7 @@ Primary responsibilities:
 - review implementations,
 - identify bugs,
 - challenge assumptions,
-- inspect architecture,
+- independently review important architectural decisions,
 - review tests,
 - identify missing edge cases,
 - suggest simpler implementations,
@@ -182,6 +186,18 @@ Not every tiny change requires every tool.
 
 Use the smallest workflow appropriate to the risk.
 
+Routine, low-risk developer tooling choices — for example a formatter, a
+linter, an ordinary test runner, or local development convenience tooling
+— do not require the full architecture/ADR process. They may be proposed
+and approved through a lightweight project-owner decision.
+
+The full process (ChatGPT-led discussion, Sagar approval, Codex review,
+and a `DECISION_LOG.md` entry) remains required when a choice materially
+affects biological data interpretation, scientific assumptions,
+reproducibility, persistent data formats/interfaces, simulation behaviour,
+major dependencies, or architecture/system boundaries (see
+`ENGINEERING_STANDARDS.md` §10).
+
 ---
 
 # 9. Conflict Resolution
@@ -238,3 +254,12 @@ and
 AI tools accelerate the project.
 
 They do not replace understanding.
+
+---
+
+# 13. Workspace Verification
+
+Before an AI agent reviews or modifies repository state, it must verify
+the repository/worktree it is operating on (repository root, branch and
+HEAD). It must not assume that two clones of the same GitHub repository
+share working-tree state.
