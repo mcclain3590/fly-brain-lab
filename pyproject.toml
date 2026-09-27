@@ -1,0 +1,6 @@
+[project]
+name = "fly-brain-lab"
+version = "0.0.0"
+description = "Experimental platform for exploring, simulating and learning from biological neural circuits derived from the Drosophila connectome."
+requires-python = ">=3.12,<3.13"
+readme = "README.md"
