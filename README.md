@@ -50,7 +50,11 @@ pyproject.toml   Minimal Python project configuration
 
 ## Requirements
 
-- Python **3.12** (`>=3.12,<3.13`)
+- Supported Python series (per `pyproject.toml`): **`>=3.12,<3.13`**
+- Validated development interpreter (pinned in `.python-version`):
+  **Python 3.12.8**. This is the specific patch version local development
+  has been verified against; it does not imply other 3.12.x patch versions
+  are unsupported.
 
 ## Environment Setup
 
