@@ -14,9 +14,15 @@ This document describes the planned high-level structure of Fly Brain Lab: the
 major system boundaries, the expected data/processing pipeline, and how
 biological source data is kept separate from computational modelling.
 
-It does not describe existing software. Everything below is a plan, not a
-report of implemented code, consistent with the current milestone (see
-`ROADMAP.md`, M0 — Project Foundation).
+Most of what follows is still a plan, not a report of implemented code.
+The current milestone is M1 — Connectome Access (see `ROADMAP.md`), and one
+narrow slice of this architecture is now implemented as part of M1.1:
+neuPrint authentication, the deterministic `ORN_DA1 -> DA1_lPN` retrieval,
+local raw artifact writing, and provenance/checksum recording (see Section
+4 below for exactly which components this covers). Everything past that —
+the connectivity graph, computational neuron models, simulation, sensory/
+motor interfaces, the environment, and plasticity — remains planned and
+unimplemented.
 
 Architecture changes must follow the ownership model defined in
 `TOOL_ROLES.md`: ChatGPT leads architecture discussion, Claude Code may
