@@ -1,6 +1,12 @@
 # Fly Brain Lab — Architecture (Planned)
 
-Status: **DRAFT — structural document only. No component described here is implemented yet.**
+Status: **DRAFT.** Most components described here remain planned, not
+implemented. A narrow exception now exists: neuPrint data access/
+authentication, the small deterministic `ORN_DA1 -> DA1_lPN` retrieval,
+local raw artifact writing, and provenance/checksum recording are
+implemented (see `src/flybrain/`, M1.1 in `docs/ROADMAP.md`). This does not
+make the general "Data Access Layer" or "Local Data Store" components
+complete — only this one narrow, hard-coded circuit's retrieval path.
 
 ## 1. Purpose
 
@@ -37,13 +43,17 @@ All stages below are **planned**, not implemented. The sequence follows the
 milestones in `ROADMAP.md`.
 
 ```
-[Biological Source Data]          (external, measured; PLANNED — see DATA_SOURCES.md)
+[Biological Source Data]          (external, measured; see DATA_SOURCES.md)
         |
         v
-[Data Access Layer]               (PLANNED — M1: retrieval from authoritative source)
+[Data Access Layer]               (PARTIAL — M1.1: neuPrint auth + one hard-coded
+                                    ORN_DA1 -> DA1_lPN query implemented; a general
+                                    data access layer is still PLANNED)
         |
         v
-[Local Data Store]                (PLANNED — M1: small, verified subset)
+[Local Data Store]                (PARTIAL — M1.1: raw CSV + checksummed provenance
+                                    JSON written to data/raw/da1/; no general local
+                                    data store exists yet)
         |
         v
 [Connectivity Graph]              (PLANNED — M2: neurons as nodes, connections as edges)
@@ -67,7 +77,9 @@ milestones in `ROADMAP.md`.
 [Experiment Harness / Logging]    (PLANNED — cross-cutting; records to EXPERIMENT_LOG.md)
 ```
 
-Every box above is **not implemented**. This diagram shows intended
+Only the two boxes marked PARTIAL above are implemented, and only for the
+one hard-coded `ORN_DA1 -> DA1_lPN` circuit — everything else in this
+diagram remains **not implemented**. This diagram shows intended
 boundaries only; it is not a commitment to a build order beyond what
 `ROADMAP.md` already states.
 
@@ -75,8 +87,12 @@ boundaries only; it is not a commitment to a build order beyond what
 
 | Component | Status | Notes |
 |---|---|---|
-| Data access layer | Planned | Target dataset/API not yet chosen or verified — see `DATA_SOURCES.md` |
-| Local data store | Planned | Storage format not yet decided |
+| neuPrint data access/authentication | Implemented (narrow) | `src/flybrain/neuprint_client.py`; connects to `male-cns:v1.0` via `neuprint-python`, token from `NEUPRINT_TOKEN` only. Not a general-purpose data access layer. |
+| DA1 connectome retrieval | Implemented (narrow) | `src/flybrain/da1_retrieval.py`, `scripts/retrieve_da1.py`; one fixed, deterministic Cypher query for `ORN_DA1 -> DA1_lPN`, top 20 by synapse weight. See `docs/DATA_SOURCES.md`. |
+| Local raw artifact writing | Implemented (narrow) | Untouched CSV written under `data/raw/da1/` (git-ignored), refuses to overwrite an existing artifact. |
+| Provenance / checksum recording | Implemented (narrow) | SHA-256 checksum, query, dataset, timestamp, row/unique-neuron counts recorded as JSON alongside the CSV. |
+| General data access layer | Planned | Only the one narrow DA1 query path above exists; a general retrieval layer for arbitrary circuits is not yet designed |
+| General local data store | Planned | Only ad hoc CSV+JSON per retrieval exists; no general storage format decided |
 | Connectivity graph representation | Planned | Graph library/approach not yet decided |
 | Computational neuron model | Planned | Model family not yet decided — deferred to M4 per roadmap |
 | Simulation / propagation engine | Planned | No simulation framework has been chosen |

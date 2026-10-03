@@ -59,6 +59,11 @@ EXPECTED_COLUMNS = [
     "synapse_weight",
 ]
 
+# Repo-relative directory raw retrieval artifacts are written under.
+# Used both to build the repo-relative path recorded in provenance and by
+# scripts/retrieve_da1.py to resolve the absolute output directory.
+ARTIFACT_SUBDIR = Path("data/raw/da1")
+
 
 class FetchCustomClient(Protocol):
     """Structural type for anything exposing neuprint.Client's fetch_custom."""
@@ -90,13 +95,20 @@ def save_raw_csv(
 ) -> Path:
     """Save the untouched table as CSV under output_dir, deterministically.
 
-    The filename encodes the UTC retrieval timestamp so repeated runs
-    never silently overwrite a prior retrieval's artifact.
+    The filename encodes the UTC retrieval timestamp, but timestamp
+    resolution alone cannot guarantee uniqueness (two runs within the same
+    second would collide). To guarantee an existing artifact is never
+    silently overwritten, this raises `FileExistsError` if the target path
+    already exists, instead of writing over it.
     """
     ts = timestamp or datetime.now(timezone.utc)
     output_dir.mkdir(parents=True, exist_ok=True)
     filename = f"orn_da1_to_da1_lpn_{ts.strftime('%Y%m%dT%H%M%SZ')}.csv"
     csv_path = output_dir / filename
+    if csv_path.exists():
+        raise FileExistsError(
+            f"Refusing to overwrite existing artifact: {csv_path}"
+        )
     table.to_csv(csv_path, index=False, columns=EXPECTED_COLUMNS)
     return csv_path
 
@@ -120,20 +132,25 @@ def build_provenance(
     *,
     table: pd.DataFrame,
     csv_path: Path,
-    row_count: int,
     retrieval_timestamp: datetime,
     server: str = DEFAULT_SERVER,
     dataset: str = DEFAULT_DATASET,
 ) -> dict[str, Any]:
     """Build the provenance record for one retrieval run.
 
+    `row_count` and the unique-neuron counts are computed from `table`
+    here, rather than accepted as separately supplied arguments, so the
+    provenance record cannot drift from the table it actually describes.
+
     Contains no secrets: the auth token is never read or included here.
     """
+    row_count = len(table)
     unique_source_neurons = int(table["source_body_id"].nunique())
     unique_target_neurons = int(table["target_body_id"].nunique())
     unique_total_neurons = len(
         set(table["source_body_id"]) | set(table["target_body_id"])
     )
+    artifact_path = str(ARTIFACT_SUBDIR / csv_path.name)
 
     return {
         "source_system": "Janelia neuPrint",
@@ -149,6 +166,7 @@ def build_provenance(
         "unique_source_neurons": unique_source_neurons,
         "unique_target_neurons": unique_target_neurons,
         "unique_total_neurons": unique_total_neurons,
+        "artifact_path": artifact_path,
         "output_filename": csv_path.name,
         "sha256_checksum": sha256_of_file(csv_path),
     }

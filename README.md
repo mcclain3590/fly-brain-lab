@@ -22,9 +22,13 @@ advance (`docs/PROJECT_CHARTER.md` §3).
 
 ## Current Status
 
-**M0 — Project Foundation, in progress** (see `docs/ROADMAP.md`). No source
-code has been implemented yet. This milestone establishes the repository,
-governance documentation, and Python project scaffolding.
+**M0 — Project Foundation: COMPLETE.** **M1 — Connectome Access: IN
+PROGRESS** (see `docs/ROADMAP.md`). The first narrow slice of M1 (M1.1) is
+implemented and has been run live: a deterministic retrieval of the
+`ORN_DA1 -> DA1_lPN` circuit from the `male-cns:v1.0` dataset via neuPrint
+(see `src/flybrain/`, `docs/DATA_SOURCES.md`). This is one hard-coded
+circuit, not a general connectome access layer — most of M1 and all later
+milestones remain planned.
 
 ## Scientific Scope & Caution
 
@@ -41,11 +45,14 @@ consciousness, or prove that simulated behaviour is biologically equivalent
 ## Repository Structure
 
 ```
-docs/            Governance, architecture and research documentation
-src/flybrain/    Python package source (planned; not yet created)
-data/raw/        Raw retrieved dataset artifacts (planned; git-ignored except placeholders)
-data/processed/  Derived/processed data artifacts (planned; git-ignored except placeholders)
-pyproject.toml   Minimal Python project configuration
+docs/              Governance, architecture and research documentation
+src/flybrain/      Python package: neuPrint connection + DA1 retrieval logic
+scripts/           Runnable entry points (e.g. retrieve_da1.py)
+tests/             Unit tests (no network access or credentials required)
+data/raw/da1/      Raw retrieval artifacts for the DA1 circuit (git-ignored;
+                   never committed — see docs/DATA_SOURCES.md for provenance)
+data/processed/    Derived/processed data artifacts (planned; not yet used)
+pyproject.toml     Python project configuration and dependencies
 ```
 
 ## Requirements
@@ -55,20 +62,41 @@ pyproject.toml   Minimal Python project configuration
   **Python 3.12.8**. This is the specific patch version local development
   has been verified against; it does not imply other 3.12.x patch versions
   are unsupported.
+- Runtime dependencies (pinned in `pyproject.toml`, matching the validated
+  retrieval environment): `neuprint-python==0.6.3`, `pandas==3.0.6`.
+- Test dependency: `pytest` (version not yet pinned/validated against a
+  specific release — see `docs/ENGINEERING_STANDARDS.md` §10 on routine
+  tooling choices).
 
 ## Environment Setup
-
-No runtime dependencies are declared yet — M0 does not include connectome
-access or simulation code (see `docs/ENGINEERING_STANDARDS.md`). A minimal
-local environment can be created with:
 
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
+pip install -e ".[test]"
 ```
 
-Dependencies (e.g. for connectome access) will be added in a later milestone
-once the corresponding architecture is proposed and approved.
+Run the test suite (no network access or neuPrint credentials required —
+see `tests/`):
+
+```bash
+pytest
+```
+
+To run the actual DA1 connectome retrieval, you need a neuPrint auth token.
+**Never commit, print, or hard-code the token.** Export it as an
+environment variable for the one command that needs it, then run the
+script:
+
+```bash
+export NEUPRINT_TOKEN="<your token>"
+python scripts/retrieve_da1.py
+```
+
+This saves the raw CSV and a provenance JSON (checksum, query, timestamp,
+row/unique-neuron counts) under `data/raw/da1/`, which is git-ignored — the
+retrieved data itself is never committed, only its provenance record (see
+`docs/DATA_SOURCES.md`).
 
 ## Governance & Documentation
 
@@ -82,12 +110,12 @@ GitHub is this project's single source of truth (`docs/PROJECT_CHARTER.md`
   person/tool contributing to the project, and the architecture ownership
   model
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — planned system boundaries
-  and pipeline (nothing described there is implemented yet)
+  and pipeline, with current implementation status per component
 - [`docs/ENGINEERING_STANDARDS.md`](docs/ENGINEERING_STANDARDS.md) —
   code quality, testing, reproducibility and assumption-documentation
   standards
 - [`docs/DATA_SOURCES.md`](docs/DATA_SOURCES.md) — connectome dataset
-  provenance template (not yet filled in)
+  provenance template and the current entry for `male-cns:v1.0`
 - [`docs/DECISION_LOG.md`](docs/DECISION_LOG.md) — architecture decision
   record
 - [`docs/EXPERIMENT_LOG.md`](docs/EXPERIMENT_LOG.md) — experiment record

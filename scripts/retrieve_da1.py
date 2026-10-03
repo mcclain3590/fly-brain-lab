@@ -21,6 +21,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
 from flybrain.da1_retrieval import (  # noqa: E402
+    ARTIFACT_SUBDIR,
     build_provenance,
     fetch_orn_da1_to_da1_lpn,
     save_provenance,
@@ -32,7 +33,7 @@ from flybrain.neuprint_client import (  # noqa: E402
     get_client,
 )
 
-OUTPUT_DIR = REPO_ROOT / "data" / "raw" / "da1"
+OUTPUT_DIR = REPO_ROOT / ARTIFACT_SUBDIR
 
 
 def main() -> int:
@@ -44,7 +45,6 @@ def main() -> int:
     provenance = build_provenance(
         table=table,
         csv_path=csv_path,
-        row_count=len(table),
         retrieval_timestamp=retrieval_timestamp,
         server=DEFAULT_SERVER,
         dataset=DEFAULT_DATASET,

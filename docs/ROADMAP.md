@@ -360,8 +360,11 @@ These subjects may be discussed scientifically but are not engineering milestone
 M1 — Connectome Access (IN PROGRESS)
 
 First selected circuit: `ORN_DA1 -> DA1_lPN` (see `docs/DATA_SOURCES.md`).
-Dataset/endpoint access verified live; authoritative checksummed retrieval
-via `scripts/retrieve_da1.py` not yet executed.
+M1.1 DA1 retrieval has successfully executed against `male-cns:v1.0` via
+`scripts/retrieve_da1.py`, producing a checksummed local raw artifact
+(20 rows; see `docs/DATA_SOURCES.md` for the full record). M1 overall
+remains IN PROGRESS — inspection of fields and connectivity visualisation
+(M2) have not started.
 
 Next:
 
