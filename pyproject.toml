@@ -4,3 +4,19 @@ version = "0.0.0"
 description = "Experimental platform for exploring, simulating and learning from biological neural circuits derived from the Drosophila connectome."
 requires-python = ">=3.12,<3.13"
 readme = "README.md"
+dependencies = [
+    "neuprint-python>=0.6.3",
+    "pandas",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -10,7 +10,7 @@ Do not scale until the current level is understood, tested and reproducible.
 
 # M0 — Project Foundation
 
-Status: IN PROGRESS
+Status: COMPLETE
 
 Goal:
 
@@ -40,6 +40,8 @@ architecture, rules and next milestone can be understood from the repository.
 ---
 
 # M1 — Connectome Access
+
+Status: IN PROGRESS
 
 Goal:
 
@@ -355,8 +357,13 @@ These subjects may be discussed scientifically but are not engineering milestone
 
 # Current Position
 
-M0 — Project Foundation
+M1 — Connectome Access (IN PROGRESS)
+
+First selected circuit: `ORN_DA1 -> DA1_lPN` (see `docs/DATA_SOURCES.md`).
+Dataset/endpoint access verified live; authoritative checksummed retrieval
+via `scripts/retrieve_da1.py` not yet executed.
 
 Next:
 
-Complete M0 before retrieving biological data.
+Complete M1 retrieval, inspection and provenance documentation before
+moving to M2 — Connectivity Visualisation.
