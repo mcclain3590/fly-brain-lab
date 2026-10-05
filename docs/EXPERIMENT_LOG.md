@@ -214,13 +214,16 @@ Rules:
   - `sum_out_degree`: expected 20, got 20
   - `positive_synapse_weights`: 0 missing or non-positive edges
   - `weight_conservation`: incoming 984, outgoing 984, edge total 984
-  The Phase A criteria "nodes with out-degree > 0 == 18" and "nodes with
-  in-degree > 0 == 5" are not separate script checks; they are covered by
-  the node-type-count and disjointness checks above, and are consistent
-  with the reported degree data (derived by Claude Code by arithmetic from
-  the reported figures: 16 sources with out-degree 1 and 2 with out-degree
-  2 give 18 source nodes and 20 edges; the 5 DA1_lPN nodes have 7 + 5 + 3 +
-  3 + 2 = 20 incoming edges).
+  Two further Phase A criteria, "nodes with out-degree > 0 (source role) ==
+  18" and "nodes with in-degree > 0 (target role) == 5", were not separate
+  programmatic validation checks: none of the nine lines above tests them,
+  and they were not independently checked by the validation routine. They
+  were verified from the reported per-node degree output of the real
+  execution (supplied by Sagar; not reproduced by Claude Code), which showed
+  that all 18 `ORN_DA1` nodes had out-degree > 0 and all 5 `DA1_lPN` nodes
+  had in-degree > 0. The criteria were therefore satisfied in the observed
+  result, but by inspection of the reported per-node output, not by the
+  nine-line validation routine.
 - Results:
   - Global: 23 nodes; 20 edges; total structural synapse weight 984. (The
     total of 984 is a first-run measurement; Phase A did not predict it.)

@@ -84,11 +84,11 @@ milestones in `ROADMAP.md`.
 [Experiment Harness / Logging]    (PLANNED — cross-cutting; records to EXPERIMENT_LOG.md)
 ```
 
-Only the two boxes marked PARTIAL above are implemented, and only for the
-one hard-coded `ORN_DA1 -> DA1_lPN` circuit — everything else in this
-diagram remains **not implemented**. This diagram shows intended
-boundaries only; it is not a commitment to a build order beyond what
-`ROADMAP.md` already states.
+Only the boxes marked PARTIAL above have implemented project code, and only
+for the one hard-coded `ORN_DA1 -> DA1_lPN` circuit; the remaining components
+are planned — everything else in this diagram remains **not implemented**.
+This diagram shows intended boundaries only; it is not a commitment to a
+build order beyond what `ROADMAP.md` already states.
 
 ## 4. Component Status
 
