@@ -100,7 +100,7 @@ boundaries only; it is not a commitment to a build order beyond what
 | Provenance / checksum recording | Implemented (narrow) | SHA-256 checksum, query, dataset, timestamp, row/unique-neuron counts recorded as JSON alongside the CSV. |
 | General data access layer | Planned | Only the one narrow DA1 query path above exists; a general retrieval layer for arbitrary circuits is not yet designed |
 | General local data store | Planned | Only ad hoc CSV+JSON per retrieval exists; no general storage format decided |
-| Connectivity graph representation | Implemented (narrow) | `src/flybrain/da1_graph.py`, `src/flybrain/da1_graph_plot.py`, `scripts/analyze_da1_graph.py`; NetworkX `DiGraph` over the selected 20 `ORN_DA1 -> DA1_lPN` edges only, plus one static figure (E001). Not a general graph framework; representation for simulation is undecided. Unit tests use synthetic fixtures only; real E001 execution has not yet occurred. NetworkX/Matplotlib approved for M2.1 only (D005). |
+| Connectivity graph representation | Implemented (narrow) | `src/flybrain/da1_graph.py`, `src/flybrain/da1_graph_plot.py`, `scripts/analyze_da1_graph.py`; NetworkX `DiGraph` over the selected 20 `ORN_DA1 -> DA1_lPN` edges only, plus one static figure (E001). Not a general graph framework; representation for simulation is undecided. Unit tests use synthetic fixtures only; E001 has executed successfully on the real checksummed artifact (2026-10-05). NetworkX/Matplotlib approved for M2.1 only (D005). |
 | Computational neuron model | Planned | Model family not yet decided — deferred to M4 per roadmap |
 | Simulation / propagation engine | Planned | No simulation framework has been chosen |
 | Sensory / motor interface | Planned | Encoding/decoding scheme not yet defined |

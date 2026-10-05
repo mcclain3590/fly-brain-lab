@@ -111,8 +111,8 @@ python scripts/analyze_da1_graph.py
 ```
 
 **Status:** the M2.1 implementation exists and its unit tests (synthetic
-fixtures only) pass. Real E001 execution against the retrieved artifact has
-**not yet occurred**, so no E001 results exist.
+fixtures only) pass. E001 has been executed successfully (2026-10-05) on the
+real, checksummed artifact; the record is in `docs/EXPERIMENT_LOG.md`.
 
 The script verifies the input's SHA-256 before parsing, runs the E001
 validation checks, prints global / per-node / `DA1_lPN` convergence
@@ -143,4 +143,4 @@ GitHub is this project's single source of truth (`docs/PROJECT_CHARTER.md`
 - [`docs/DECISION_LOG.md`](docs/DECISION_LOG.md) — architecture decision
   record
 - [`docs/EXPERIMENT_LOG.md`](docs/EXPERIMENT_LOG.md) — experiment record
-  template (no experiments have been run yet)
+  template and records (E001 executed)
