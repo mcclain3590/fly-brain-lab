@@ -107,3 +107,27 @@ reflect the supersession.
   changes (e.g. to `ARCHITECTURE.md`) must follow this chain: propose →
   ChatGPT-led discussion → Sagar approval → Codex review of significant
   work → recorded here.
+
+## D005 — NetworkX and Matplotlib for M2.1 static graph analysis and visualisation
+
+- Status: Accepted (scope limited to M2.1; see Decision)
+- Date: 2026-10-04 (proposed); accepted 2026-10-05
+- Approved by: Sagar. NetworkX was specified in the M2.1 implementation
+  instruction; NetworkX `3.7` and Matplotlib `3.11.2` were then both
+  explicitly approved on 2026-10-05.
+- Context: `ARCHITECTURE.md` §5 deferred the graph library choice until the
+  roadmap first required it. M2.1 (experiment E001) is that point: it needs
+  a directed weighted graph of the selected 20 `ORN_DA1 -> DA1_lPN` edges
+  plus one static figure.
+- Decision: Use `networkx==3.7` (`DiGraph`) and `matplotlib==3.11.2`, both
+  pinned in `pyproject.toml`, **for M2.1 static graph analysis and
+  visualisation only**. They are used in `src/flybrain/da1_graph.py`,
+  `src/flybrain/da1_graph_plot.py` and `scripts/analyze_da1_graph.py`, which
+  handle only the selected DA1 edge table. This is not a general graph
+  framework.
+- Evidence / source: Sagar's M2.1 instruction and 2026-10-05 approval;
+  `docs/EXPERIMENT_LOG.md` E001 Phase A.
+- Consequences: Two new runtime dependencies. This does **not** select
+  either library for simulation (M5), larger circuits, or whole-connectome
+  work; the graph representation for those remains undecided and will need
+  its own decision.

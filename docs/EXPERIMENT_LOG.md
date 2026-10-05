@@ -90,9 +90,11 @@ Rules:
   retrieved for M1.1, not the complete DA1 circuit, and the result
   describes only this subset. The neuPrint `synapse_weight` is a
   structural synapse count for the connection; it must not be described
-  or interpreted as electrical signal strength. Visualisation (plotting
-  `ORN_DA1`/`DA1_lPN` nodes, directed edges, and edge weights) is a later,
-  separate step and is out of scope for this experiment's execution.
+  or interpreted as electrical signal strength. The single planned
+  visualisation is one simple static bipartite figure (`ORN_DA1` left,
+  `DA1_lPN` right, edges left-to-right) with edge weight labelled as
+  synapse count; no other visualisation, simulation, neuron dynamics, or
+  plasticity is part of this experiment.
 - Source DATA_SOURCES.md entry (dataset + version used): `male-cns:v1.0`
   (Janelia neuPrint) entry in `docs/DATA_SOURCES.md`, retrieved
   2026-10-03T06:24:31.765554+00:00 via `scripts/retrieve_da1.py`.
@@ -108,15 +110,17 @@ Rules:
 - Random seed(s), where applicable: Not applicable. All planned
   computations (counts, degree, weight sums, convergence) are
   deterministic given the fixed input artifact.
-- Dependency/environment reference: Not yet decided. No graph library
-  (e.g. NetworkX) has been installed or approved for this experiment, and
-  none should be installed at this stage. The computation can in principle
-  be performed directly from the CSV with `pandas` (already a project
-  dependency); the graph-library question, if any, is deferred to
-  implementation time per the architecture ownership process.
-- Planned execution command / entry point: Not yet implemented. No graph
-  code exists yet (explicitly out of scope for this task). An entry point
-  will be defined when M2.1 is implemented.
+- Dependency/environment reference: Python 3.12.8 (`.python-version`);
+  `networkx==3.7` (directed weighted graph; approved by Sagar for M2.1),
+  `matplotlib==3.11.2` (static figure; both approved by Sagar for M2.1
+  only, see `docs/DECISION_LOG.md` D005), `pandas==3.0.6`,
+  `neuprint-python==0.6.3` (not used by this experiment; no network
+  access). All pinned in `pyproject.toml`. See "Amendments" below.
+- Planned execution command / entry point: `python scripts/analyze_da1_graph.py`
+  (no arguments; reads only the artifact above, verifies its SHA-256 before
+  parsing, writes the figure to
+  `data/processed/da1/m2_1_selected_connectivity.png`, which is git-ignored).
+  See "Amendments" below.
 - Expected validation criteria (defined before running): Given the known,
   already-verified properties of the input artifact, a correct
   implementation must reproduce:
@@ -133,11 +137,37 @@ Rules:
     the sum of `synapse_weight` over all 20 edges (a conservation check;
     this total itself is a first-run measurement, not a value predicted
     in advance)
+  - the input file's SHA-256 matches the value above, checked before the
+    file is parsed
+  - exactly 18 nodes typed `ORN_DA1` and exactly 5 typed `DA1_lPN`
+    (node type is taken from the retrieval query's type filters, not
+    parsed from instance strings)
+  - every edge `synapse_weight` is positive (no zero, negative, or missing
+    weights)
   If any of these fail, the implementation should be treated as suspect
   first, since the input artifact's checksum above is already fixed and
   verified.
+- Amendments (chronology): the fields below were originally recorded on
+  2026-10-03 and were amended on 2026-10-04 and 2026-10-05, **after
+  implementation planning had begun** (the M2.1 code had been written and
+  unit-tested on synthetic fixtures) and **before any execution against the
+  real artifact**. No measurement or result influenced these amendments,
+  because none existed.
+  - Scope boundary: originally stated that visualisation was "a later,
+    separate step … out of scope for this experiment's execution". Now
+    scopes in exactly one static bipartite figure.
+  - Dependency/environment reference: originally "Not yet decided"; no
+    graph library approved. Now the pinned versions listed above.
+  - Planned execution command / entry point: originally "Not yet
+    implemented". Now `python scripts/analyze_da1_graph.py`.
+  - Expected validation criteria: the final three bullets (checksum
+    verified before parsing; 18 `ORN_DA1` / 5 `DA1_lPN` node types;
+    positive weights) were added. The original criteria are
+    unchanged.
 
 #### Phase B — Post-run record (recorded after execution)
 
-_Not yet executed. No graph code has been written or run for this
-experiment._
+**NOT EXECUTED.** The analysis code exists and is unit-tested on synthetic
+fixtures only. It has not been run against the real input artifact, and no
+E001 measurements exist. No results may be recorded here until the script
+has been run against the real artifact on Sagar's machine.

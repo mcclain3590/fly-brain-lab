@@ -46,12 +46,13 @@ consciousness, or prove that simulated behaviour is biologically equivalent
 
 ```
 docs/              Governance, architecture and research documentation
-src/flybrain/      Python package: neuPrint connection + DA1 retrieval logic
-scripts/           Runnable entry points (e.g. retrieve_da1.py)
+src/flybrain/      Python package: neuPrint connection, DA1 retrieval, and
+                   selected-DA1 graph analysis/figure (M2.1)
+scripts/           Runnable entry points (retrieve_da1.py, analyze_da1_graph.py)
 tests/             Unit tests (no network access or credentials required)
 data/raw/da1/      Raw retrieval artifacts for the DA1 circuit (git-ignored;
                    never committed — see docs/DATA_SOURCES.md for provenance)
-data/processed/    Derived/processed data artifacts (planned; not yet used)
+data/processed/    Derived outputs, e.g. the M2.1 figure (git-ignored)
 pyproject.toml     Python project configuration and dependencies
 ```
 
@@ -63,7 +64,9 @@ pyproject.toml     Python project configuration and dependencies
   has been verified against; it does not imply other 3.12.x patch versions
   are unsupported.
 - Runtime dependencies (pinned in `pyproject.toml`, matching the validated
-  retrieval environment): `neuprint-python==0.6.3`, `pandas==3.0.6`.
+  retrieval environment): `neuprint-python==0.6.3`, `pandas==3.0.6`,
+  plus, for M2.1 graph analysis, `networkx==3.7` and `matplotlib==3.11.2`
+  (see `docs/DECISION_LOG.md` D005).
 - Test dependency: `pytest` (version not yet pinned/validated against a
   specific release — see `docs/ENGINEERING_STANDARDS.md` §10 on routine
   tooling choices).
@@ -97,6 +100,27 @@ This saves the raw CSV and a provenance JSON (checksum, query, timestamp,
 row/unique-neuron counts) under `data/raw/da1/`, which is git-ignored — the
 retrieved data itself is never committed, only its provenance record (see
 `docs/DATA_SOURCES.md`).
+
+## Selected DA1 Graph Analysis (E001 / M2.1)
+
+Once the raw artifact named in `docs/EXPERIMENT_LOG.md` (E001) is present
+under `data/raw/da1/`, analyse it — no token or network access needed:
+
+```bash
+python scripts/analyze_da1_graph.py
+```
+
+**Status:** the M2.1 implementation exists and its unit tests (synthetic
+fixtures only) pass. Real E001 execution against the retrieved artifact has
+**not yet occurred**, so no E001 results exist.
+
+The script verifies the input's SHA-256 before parsing, runs the E001
+validation checks, prints global / per-node / `DA1_lPN` convergence
+metrics, and saves one static figure to
+`data/processed/da1/m2_1_selected_connectivity.png` (git-ignored). It covers
+only the selected top-20 strongest `ORN_DA1 -> DA1_lPN` edges, not the
+complete DA1 circuit, and `synapse_weight` is a structural synapse count,
+not electrical signal strength.
 
 ## Governance & Documentation
 
